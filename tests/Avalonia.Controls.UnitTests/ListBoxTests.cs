@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 using Avalonia.Collections;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
@@ -544,26 +546,24 @@ namespace Avalonia.Controls.UnitTests
         [Fact]
         public void Initial_Binding_Of_SelectedItems_Should_Not_Cause_Write_To_SelectedItems()
         {
+            var ob1 = new MyList<string> { "Foo", "Bar", "Baz" };
+            IReadOnlyCollection<object> items = ob1;
+            var ob = new ObservableCollection<string> { "Bar" };
             var target = new ListBox
             {
-                [!ListBox.ItemsSourceProperty] = new Binding("Items"),
-                [!ListBox.SelectedItemsProperty] = new Binding("SelectedItems"),
-            };
-
-            var viewModel = new
-            {
-                Items = new[] { "Foo", "Bar", "Baz " },
-                SelectedItems = new ObservableCollection<string> { "Bar" },
+                [ListBox.ItemsSourceProperty] = items,
+                [ListBox.SelectedItemsProperty] = ob,
             };
 
             var raised = 0;
 
-            viewModel.SelectedItems.CollectionChanged += (s, e) => ++raised;
+            ob.CollectionChanged += (s, e) => ++raised;
+            ob1.Add("Foo2");
 
-            target.DataContext = viewModel;
-
+            // target.DataContext = ob;
+            Assert.Equal(target.ItemCount, 4);
             Assert.Equal(0, raised);
-            Assert.Equal(new[] { "Bar" }, viewModel.SelectedItems);
+            Assert.Equal(new[] { "Bar" }, ob);
             Assert.Equal(new[] { "Bar" }, target.SelectedItems);
             Assert.Equal(new[] { "Bar" }, target.Selection.SelectedItems);
         }
@@ -1373,4 +1373,16 @@ namespace Avalonia.Controls.UnitTests
             public void RemoveAt(int index) => throw new NotSupportedException();
         }
     }
+}
+
+public class MyList<T> : List<T>, INotifyCollectionChanged
+{
+    public new void Add(T item)
+    {
+        base.Add(item);
+        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, Count));
+    }
+
+    /// <inheritdoc />
+    public event NotifyCollectionChangedEventHandler? CollectionChanged;
 }

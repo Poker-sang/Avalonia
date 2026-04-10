@@ -13,6 +13,13 @@ namespace ControlCatalog.ViewModels
         private string _textValue = string.Empty;
         private IdAndName? _selectedItem = null;
 
+        public ComboBoxPageViewModel()
+        {
+            Test = Enumerable.Range(0, 30).Select(i => Random.Shared.Next(1,4) * 50d).ToArray();
+        }
+
+        public double[] Test { get; }
+
         public bool WrapSelection
         {
             get => _wrapSelection;

@@ -7,6 +7,72 @@
     xmlns:viewModels="using:ControlCatalog.ViewModels"
     x:DataType="viewModels:ComboBoxPageViewModel">
     <StackPanel Orientation="Vertical" Spacing="4">
+
+        <WrapPanel
+            Width="200"
+            Height="200"
+            ItemsAlignment="Stretch">
+            <Border
+                Width="50"
+                Height="50"
+                Background="Red" />
+            <Border
+                Width="50"
+                Height="50"
+                Background="Blue" />
+        </WrapPanel>
+        <TextBlock Text="Start" />
+        <ItemsControl ItemsSource="{Binding Test}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        ItemHeight="50"
+                        ItemSpacing="5"
+                        ItemsAlignment="Start"
+                        LineSpacing="5" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="sys:Double">
+                    <Rectangle MinWidth="{Binding}" Fill="Red" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="Justify" />
+        <ItemsControl ItemsSource="{Binding Test}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        ItemHeight="50"
+                        ItemSpacing="5"
+                        ItemsAlignment="Justify"
+                        LineSpacing="5" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="sys:Double">
+                    <Rectangle MinWidth="{Binding}" Fill="Blue" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="Stretch" />
+        <ItemsControl ItemsSource="{Binding Test}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        ItemHeight="50"
+                        ItemSpacing="5"
+                        ItemsAlignment="Stretch"
+                        LineSpacing="5" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="sys:Double">
+                    <Rectangle MinWidth="{Binding}" Fill="Green" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <TextBlock Classes="h2">A drop-down list.</TextBlock>
 
         <StackPanel
@@ -89,9 +155,12 @@
                     </DataValidationErrors.Error>
                 </ComboBox>
 
-                <ComboBox PlaceholderText="Scaled" Width="166" RenderTransformOrigin="0,0">
+                <ComboBox
+                    Width="166"
+                    PlaceholderText="Scaled"
+                    RenderTransformOrigin="0,0">
                     <ComboBox.RenderTransform>
-                      <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
                     </ComboBox.RenderTransform>
                     <ComboBoxItem>Inline Items</ComboBoxItem>
                     <ComboBoxItem>Inline Item 2</ComboBoxItem>
@@ -99,53 +168,57 @@
                     <ComboBoxItem>Inline Item 4</ComboBoxItem>
                 </ComboBox>
 
-                <ComboBox 
-                    WrapSelection="{Binding WrapSelection}" 
-                    ItemsSource="{Binding Values}" 
+                <ComboBox
                     DisplayMemberBinding="{Binding Name}"
-                    TextSearch.TextBinding="{Binding SearchText, DataType=viewModels:IdAndName}" />
-              
-                <ComboBox 
-                    WrapSelection="{Binding WrapSelection}" 
+                    ItemsSource="{Binding Values}"
+                    TextSearch.TextBinding="{Binding SearchText, DataType=viewModels:IdAndName}"
+                    WrapSelection="{Binding WrapSelection}" />
+
+                <ComboBox
+                    ItemsSource="{Binding Values}"
                     PlaceholderText="Different Template"
-                    ItemsSource="{Binding Values}">
+                    WrapSelection="{Binding WrapSelection}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}"></TextBlock>
-                                <TextBlock Text="{Binding Id}"></TextBlock>
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Id}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                     <ComboBox.SelectionBoxItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" Foreground="Red"></TextBlock>
+                            <TextBlock Foreground="Red" Text="{Binding Name}" />
                         </DataTemplate>
                     </ComboBox.SelectionBoxItemTemplate>
                 </ComboBox>
 
-                <ComboBox WrapSelection="{Binding WrapSelection}" ItemsSource="{Binding Values}">
+                <ComboBox ItemsSource="{Binding Values}" WrapSelection="{Binding WrapSelection}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}"></TextBlock>
-                                <TextBlock Text="{Binding Id}"></TextBlock>
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Id}" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-              <StackPanel Spacing="5">
-                <ComboBox WrapSelection="{Binding WrapSelection}" PlaceholderText="Editable" 
-                          ItemsSource="{Binding Values}" DisplayMemberBinding="{Binding Name}"
-                          IsEditable="True" Text="{Binding TextValue}"
-                          TextSearch.TextBinding="{Binding SearchText, DataType=viewModels:IdAndName}"
-                          SelectedItem="{Binding SelectedItem}" />
+                <StackPanel Spacing="5">
+                    <ComboBox
+                        DisplayMemberBinding="{Binding Name}"
+                        IsEditable="True"
+                        ItemsSource="{Binding Values}"
+                        PlaceholderText="Editable"
+                        SelectedItem="{Binding SelectedItem}"
+                        Text="{Binding TextValue}"
+                        TextSearch.TextBinding="{Binding SearchText, DataType=viewModels:IdAndName}"
+                        WrapSelection="{Binding WrapSelection}" />
 
-                <TextBlock Text="Editable text is bound to SearchText. Display is bound to Name" />
-                <TextBlock Text="{Binding TextValue, StringFormat=Text Value: {0}}" />
-                <TextBlock Text="{Binding SelectedItem.Name, StringFormat=Selected Item: {0}}" />
-              </StackPanel>
+                    <TextBlock Text="Editable text is bound to SearchText. Display is bound to Name" />
+                    <TextBlock Text="{Binding TextValue, StringFormat=Text Value: {0}}" />
+                    <TextBlock Text="{Binding SelectedItem.Name, StringFormat=Selected Item: {0}}" />
+                </StackPanel>
             </WrapPanel>
         </StackPanel>
     </StackPanel>
